@@ -330,7 +330,7 @@ int simple_rename(struct inode *old_dir, struct dentry *old_dentry,
 		unsigned int flags)
 {
 	struct inode *inode = old_dentry->d_inode;
-	int they_are_dirs = S_ISDIR(old_dentry->d_inode->i_mode);
+	int they_are_dirs = d_is_dir(old_dentry);
 
 	if (flags & ~RENAME_NOREPLACE)
 		return -EINVAL;
