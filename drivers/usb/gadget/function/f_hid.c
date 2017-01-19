@@ -273,11 +273,6 @@ if (hacky_device_list_check(hidg)) {
 			return ret;
 		}
 	} else {
-
-		if (ret < 0) {
-			free_ep_req(hidg->out_ep, req);
-		}
-	} else {
 		spin_lock_irqsave(&hidg->spinlock, flags);
 		list_add(&list->list, &hidg->completed_out_req);
 		spin_unlock_irqrestore(&hidg->spinlock, flags);
@@ -565,14 +560,13 @@ static void hidg_disable(struct usb_function *f)
 
 	usb_ep_disable(hidg->out_ep);
 	hidg->out_ep->driver_data = NULL;
-
-	spin_lock_irqsave(&hidg->read_spinlock, flags);
+	spin_lock_irqsave(&hidg->spinlock, flags);
 	list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
 		free_ep_req(hidg->out_ep, list->req);
 		list_del(&list->list);
 		kfree(list);
 	}
-	spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+	spin_unlock_irqrestore(&hidg->spinlock, flags);
 }
 
 static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
