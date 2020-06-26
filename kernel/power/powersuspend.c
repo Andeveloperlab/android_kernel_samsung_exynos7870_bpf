@@ -146,7 +146,7 @@ abort_resume:
 	mutex_unlock(&power_suspend_lock);
 }
 
-bool power_suspended = false;
+bool power_suspended = true;
 
 void set_power_suspend_state(int new_state)
 {
