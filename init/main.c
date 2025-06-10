@@ -97,6 +97,10 @@
 #include <linux/sec_ext.h>
 #endif
 
+#ifdef CONFIG_KVM
+#include <linux/arm.h> // ARM with KVM preinit code
+#endif
+
 #ifdef CONFIG_SECURITY_DEFEX
 #include <linux/defex.h>
 void __init __weak defex_load_rules(void) { }
@@ -655,7 +659,7 @@ asmlinkage __visible void __init start_kernel(void)
 	trap_init();
 	mm_init();
 #ifdef CONFIG_KVM
-    void preinit_hyp_mode(void);
+    //void preinit_hyp_mode(void);
     preinit_hyp_mode();
 #endif
 

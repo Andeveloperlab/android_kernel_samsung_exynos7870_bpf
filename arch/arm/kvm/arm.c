@@ -45,11 +45,14 @@
 #include <asm/kvm_coproc.h>
 #include <asm/kvm_psci.h>
 
+#include <linux/arm.h> // Quick and dirty wrapperAdd commentMore actions
+#include <linux/vmm-kvm.h>
+
 #ifdef REQUIRES_VIRT
 __asm__(".arch_extension	virt");
 #endif
 
-static DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+//static DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
 static kvm_cpu_context_t __percpu *kvm_host_cpu_state;
 static unsigned long hyp_default_vectors;
 
@@ -805,7 +808,6 @@ long kvm_arch_vm_ioctl(struct file *filp,
 }
 
 static unsigned long hyp_stack_base;
-void vmm_init_kvm(phys_addr_t code, phys_addr_t boot_pgd_ptr, phys_addr_t pgd_ptr, unsigned long hyp_stack_ptr, unsigned long vector_ptr);
 static void cpu_init_hyp_mode(void *dummy)
 {
 	phys_addr_t boot_pgd_ptr;
@@ -819,7 +821,7 @@ static void cpu_init_hyp_mode(void *dummy)
 
 	boot_pgd_ptr = kvm_mmu_get_boot_httbr();
 	pgd_ptr = kvm_mmu_get_httbr();
-	stack_page = hyp_stack_base; //__this_cpu_read(kvm_arm_hyp_stack_page);
+	stack_page = hyp_stack_base;
 	hyp_stack_ptr = stack_page + PAGE_SIZE;
 	vector_ptr = (unsigned long)__kvm_hyp_vector;
 
@@ -1032,11 +1034,11 @@ out_free_context:
 	free_percpu(kvm_host_cpu_state);
 out_free_mappings:
 	free_hyp_pgds();
-out_free_stack_base:
-#if 0
-	for_each_possible_cpu(cpu)
-		free_page(per_cpu(kvm_arm_hyp_stack_page, cpu));
-#endif
+// out_free_stack_base:
+// #if 0
+// 	for_each_possible_cpu(cpu)
+// 		free_page(per_cpu(kvm_arm_hyp_stack_page, cpu));
+// #endif
 	//__free_pages(stack_base, 3);
 out_err:
 	kvm_err("error initializing Hyp mode: %d\n", err);
