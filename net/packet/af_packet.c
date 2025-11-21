@@ -2742,7 +2742,6 @@ static int packet_do_bind(struct sock *sk, const char *name, int ifindex,
 		BUG_ON(po->running);
 		po->num = proto;
 		po->prot_hook.type = proto;
-
 		if (unlikely(unlisted)) {
 			dev_put(dev);
 			po->prot_hook.dev = NULL;
