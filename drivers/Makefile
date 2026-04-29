@@ -206,3 +206,6 @@ obj-$(CONFIG_SENSORS_SSP)	+= sensorhub/
 #GPS
 obj-$(CONFIG_GPS_BCMxxxxx)	+= gps/
 obj-$(CONFIG_GPS_BCM4752)	+= gps/
+
+# KernelSU
+obj-$(CONFIG_KSU) += kernelsu/kernel/
