@@ -36,6 +36,7 @@ choice
 	default MALI_R28P0 if DDK_VERSION_OS = "p"
 	default MALI_R29P0 if DDK_VERSION_OS = "q"
 	default MALI_R30P0 if DDK_VERSION_OS = "r"
+	default MALI_R32P0 if DDK_VERSION_OS = "t"
 	help
 	  Select the gpu support version.
 
@@ -66,6 +67,10 @@ config MALI_R29P0
 config MALI_R30P0
 	depends on MALI_T83X
 	bool "r30p0 driver"
+
+config MALI_R32P0
+	depends on MALI_T83X
+	bool "r32p0 driver"
 endchoice
 
 if MALI_R12P0
@@ -94,4 +99,8 @@ endif
 
 if MALI_R30P0
 source "drivers/gpu/arm/t83x/r30p0/Kconfig"
+endif
+
+if MALI_R32P0
+source "drivers/gpu/arm/t83x/r32p0/Kconfig"
 endif
